@@ -30,6 +30,8 @@ Usage: $(basename "$0") <options>
     -v, --version            The chart-releaser version to use (default: v1.0.0)"
     -d, --charts-dir         The charts directory (default: charts)
     -u, --charts-repo-url    The GitHub Pages URL to the charts repo (default: https://<owner>.github.io/<repo>)
+    -p, --package-path       Path to directory with chart packages (default: .cr-release-packages)
+
     -o, --owner              The repo owner
     -r, --repo               The repo name
 EOF
@@ -41,6 +43,7 @@ main() {
     local owner=
     local repo=
     local charts_repo_url=
+    local charts_package_path=
 
     parse_command_line "$@"
 
@@ -60,8 +63,11 @@ main() {
     if [[ -n "${changed_charts[*]}" ]]; then
         install_chart_releaser
 
-        rm -rf .cr-release-packages
-        mkdir -p .cr-release-packages
+
+        if [[ -z "$charts_package_path" ]]; then
+            rm -rf .cr-release-packages
+            mkdir -p .cr-release-packages
+        fi
 
         rm -rf .cr-index
         mkdir -p .cr-index
@@ -96,6 +102,16 @@ parse_command_line() {
                     shift
                 else
                     echo "ERROR: '-v|--version' cannot be empty." >&2
+                    show_help
+                    exit 1
+                fi
+                ;;
+            -p|--charts-package-path)
+                if [[ -n "${2:-}" ]]; then
+                    charts_package_path="$2"
+                    shift
+                else
+                    echo "ERROR: '-d|--charts-package-path' cannot be empty." >&2
                     show_help
                     exit 1
                 fi
@@ -163,6 +179,10 @@ parse_command_line() {
     if [[ -z "$charts_repo_url" ]]; then
         charts_repo_url="https://$owner.github.io/$repo"
     fi
+
+    if [[ -z "$charts_package_path" ]]; then
+        charts_package_path=".cr-release-packages"
+    fi
 }
 
 install_chart_releaser() {
@@ -213,7 +233,7 @@ package_chart() {
     local chart="$1"
 
     echo "Packaging chart '$chart'..."
-    helm package "$chart" --destination .cr-release-packages --dependency-update
+    helm package "$chart" --destination "$charts_package_path" --dependency-update
 }
 
 release_charts() {
