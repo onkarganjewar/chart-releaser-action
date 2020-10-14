@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -o errexit
-set -o nounset
-set -o pipefail
+# set -o errexit
+# set -o nounset
+# set -o pipefail
 
 DEFAULT_CHART_RELEASER_VERSION=v1.0.0
 
@@ -73,6 +73,7 @@ main() {
         mkdir -p .cr-index
 
         for chart in "${changed_charts[@]}"; do
+            set -x
             if [[ -d "$chart" ]]; then
                 package_chart "$chart"
             else
@@ -82,6 +83,7 @@ main() {
 
         release_charts
         update_index
+        set +x
     else
         echo "Nothing to do. No chart changes detected."
     fi
@@ -214,11 +216,14 @@ filter_charts() {
 }
 
 lookup_changed_charts() {
+    set -x
+    ## commit is the latest tag, 0.1.1 or act-bridge-0.1.3
     local commit="$1"
 
     local changed_files
     changed_files=$(git diff --find-renames --name-only "$commit" -- "$charts_dir")
 
+    ## git diff --find-renames --name-only act-bridge-0.1.3 -- bridge/
     local fields
     if [[ "$charts_dir" == '.' ]]; then
         fields='1'
@@ -227,6 +232,7 @@ lookup_changed_charts() {
     fi
 
     cut -d '/' -f "$fields" <<< "$changed_files" | uniq | filter_charts
+    set +x
 }
 
 package_chart() {
