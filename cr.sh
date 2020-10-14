@@ -204,6 +204,7 @@ lookup_latest_tag() {
 }
 
 filter_charts() {
+    set -x
     while read chart; do
         [[ ! -d "$chart" ]] && continue
         local file="$chart/Chart.yaml"
@@ -213,6 +214,7 @@ filter_charts() {
            echo "WARNING: $file is missing, assuming that '$chart' is not a Helm chart. Skipping." 1>&2
         fi
     done
+    set +x
 }
 
 lookup_changed_charts() {
