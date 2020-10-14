@@ -193,6 +193,7 @@ install_chart_releaser() {
     sudo mv cr /usr/local/bin/cr
 }
 
+set -x
 lookup_latest_tag() {
     git fetch --tags > /dev/null 2>&1
 
@@ -264,5 +265,6 @@ update_index() {
 
     popd > /dev/null
 }
+set +x
 
 main "$@"
