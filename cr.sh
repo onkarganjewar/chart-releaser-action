@@ -215,7 +215,6 @@ filter_charts() {
 }
 
 lookup_changed_charts() {
-    echo "Inside changed_charts"
     local commit="$1"
 
     echo $commit
@@ -250,8 +249,6 @@ release_charts() {
 
 update_index() {
     echo 'Updating charts repo index...'
-
-    set -x
 
     cr index -o "$owner" -r "$repo" -c "$charts_repo_url"
 
