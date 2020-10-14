@@ -35,6 +35,10 @@ main() {
         args+=(--charts-repo-url "${INPUT_CHARTS_REPO_URL}")
     fi
 
+    if [[ -n "${INPUT_CHARTS_PACKAGE_PATH:-}" ]]; then
+        args+=(--charts-package-path "${INPUT_CHARTS_PACKAGE_PATH}")
+    fi
+
     "$SCRIPT_DIR/cr.sh" "${args[@]}"
 }
 
