@@ -73,7 +73,6 @@ main() {
         mkdir -p .cr-index
 
         for chart in "${changed_charts[@]}"; do
-            set -x
             if [[ -d "$chart" ]]; then
                 package_chart "$chart"
             else
@@ -83,7 +82,6 @@ main() {
 
         release_charts
         update_index
-        set +x
     else
         echo "Nothing to do. No chart changes detected."
     fi
