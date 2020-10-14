@@ -37,7 +37,7 @@ main() {
     if [[ -n "${INPUT_REPO:-}" ]]; then
         args+=(--repo "${INPUT_REPO}")
     else
-        repo=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
+        repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
         args+=(--repo "$repo")
     fi
 
