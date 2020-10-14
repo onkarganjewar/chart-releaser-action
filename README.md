@@ -18,6 +18,7 @@ For more information on inputs, see the [API Documentation](https://developer.gi
 - `version`: The chart-releaser version to use (default: v1.0.0)
 - `charts_dir`: The charts directory
 - `charts_repo_url`: The GitHub Pages URL to the charts repo (default: `https://<owner>.github.io/<project>`)
+- `charts_package_path`: Path to directory with chart packages (default: `.cr-release-packages`)
 
 ### Example Workflow
 
