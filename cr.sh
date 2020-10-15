@@ -224,9 +224,9 @@ lookup_changed_charts() {
     ## git diff --find-renames --name-only act-bridge-0.1.3 -- bridge/
     local fields
     if [[ "$charts_dir" == '.' ]]; then
-        fields='1'
-    else
         fields='1,2'
+    else
+        fields='1,2,3'
     fi
 
     cut -d '/' -f "$fields" <<< "$changed_files" | uniq | filter_charts
